@@ -1,4 +1,4 @@
-# **Msdoors**
+# **Msdoors by rhyan57**
 > ``Version: 1.1.1`` | ``Build: 0.1.4``
 
 > [!WARNING]
