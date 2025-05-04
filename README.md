@@ -46,5 +46,5 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Sc-Rhyan57/Msdoors/re
 - VERSÃO ANTINGA ``[ 0.0.1 ]`` | ``[BUILD: 0.0.10 ]``
 
 ```luau
-  loadstring(game:HttpGet('https://github.com/Sc-Rhyan57/Msdoors/releases/download/DOWNLOAD/TWT-msdoorsV1.lua'))()
+--[[ INDISPONÍVEL NO MOMENTO ]]--
 ```
