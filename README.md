@@ -38,7 +38,7 @@
 ---
 
 ### **📂 SCRIPT DONWLOAD**
-- VERSÃO ATUAL ``[ 1.1.1 ]`` | ``[BUILD: 0.1.4 ]``
+- VERSÃO ATUAL ``[ 1.1.1 ]`` | ``[BUILD: 0.1.3 ]``
 ```luau
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Sc-Rhyan57/Msdoors/refs/heads/main/download/main"))()
 ```
