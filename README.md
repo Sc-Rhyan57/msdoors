@@ -40,7 +40,7 @@
 ### **📂 SCRIPT DONWLOAD**
 - VERSÃO ATUAL ``[ 1.1.1 ]`` | ``[BUILD: 0.1.3 ]``
 ```luau
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Sc-Rhyan57/Msdoors/refs/heads/main/download/main"))()
+loadstring(game:HttpGet("https://msdoors-gg.vercel.app/script"))()
 ```
 ---
 - VERSÃO ANTINGA ``[ 0.0.1 ]`` | ``[BUILD: 0.0.10 ]``
