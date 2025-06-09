@@ -1,5 +1,5 @@
 # **Msdoors by rhyan57**
-> ``Version: 1.1.1`` | ``Build: 0.1.4``
+> ``Version: 1.2.2 | Build: 0.1.4``
 
 > [!WARNING]
 > Este script não foi desenvolvido nem é afiliado à equipe do [Mspaint](https://mspaint.cc/). Mas sim por um cara que gosta da mspaint!
@@ -18,11 +18,9 @@
 - **Sistemas Novos toda semana**,
 - **Código Aberto**.
 
-### **🎮 GAMES SUPORTE**
+### **🎮 GAMES SUPORTADOS**
 - **Doors**,
 - **Natural Disaster**
-- **Carrinho + Cart para giganoob!**
-- e mais...
 
 ### **🌐 WEBSITE**
 📍 [ **Msdoors Web**](https://msdoors-gg.vercel.app/)
@@ -38,13 +36,8 @@
 ---
 
 ### **📂 SCRIPT DONWLOAD**
-- VERSÃO ATUAL ``[ 1.1.1 ]`` | ``[BUILD: 0.1.3 ]``
+- VERSÃO ATUAL
 ```luau
 loadstring(game:HttpGet("https://msdoors-gg.vercel.app/script"))()
 ```
 ---
-- VERSÃO ANTINGA ``[ 0.0.1 ]`` | ``[BUILD: 0.0.10 ]``
-
-```luau
---[[ INDISPONÍVEL NO MOMENTO ]]--
-```
