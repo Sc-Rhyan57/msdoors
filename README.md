@@ -31,7 +31,7 @@
 
 
 ### **💻 ADDONS**
-📌 [ **Website Doc** ](https://msdoors-gg.vercel.app/Addons)
+📌 [ **Website Doc** ](https://msdoors.vercel.app/Addons)
 
 📌 [ **Github Doc** ](https://github.com/Sc-Rhyan57/MsAddons/tree/main)
 
