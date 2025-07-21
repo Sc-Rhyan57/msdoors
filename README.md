@@ -10,7 +10,7 @@
 
 ---
 
-![Preview msdoors](https://msdoors.vercel.app/_next/image?url=%2Fmspaint.png&w=750&q=75)
+![Preview msdoors](https://raw.githubusercontent.com/RhyanXG7/host-de-imagens/refs/heads/BetterStar/imagens-Host/Novo%20projeto%206%20%5B2C6A615%5D.png)
 
 ### **📍 VANTAGENS**
 - **Otimizado**,
