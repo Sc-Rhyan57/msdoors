@@ -15,12 +15,12 @@
 ### **📍 VANTAGENS**
 - **Otimizado**,
 - **Sempre Atualizado**,
-- **Sistemas Novos toda semana**,
-- **Código Aberto**.
+- **Sistemas Novos toda semana**.
 
 ### **🎮 GAMES SUPORTADOS**
 - **Doors**,
-- **Natural Disaster**
+- **Natural Disaster**,
+- **Carrinho Cart para giganoob**.
 
 ### **🌐 WEBSITE**
 📍 [ **Msdoors Web**](https://msdoors-gg.vercel.app/)
