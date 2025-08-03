@@ -1,5 +1,4 @@
 # **Msdoors by rhyan57**
-> ``Version: 1.2.2 | Build: 0.1.4``
 
 > [!WARNING]
 > Este script não foi desenvolvido nem é afiliado à equipe do [Mspaint](https://mspaint.cc/). Mas sim por um cara que gosta da mspaint!
