@@ -137,7 +137,6 @@ local function startMsdoors()
     if success then
         notify("Sucesso", "Script executed successfully!")
     else
-        shared.loaded = false
     end
     
     _G.msdoors_isloading = false
