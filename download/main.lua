@@ -49,7 +49,8 @@ local SUPPORTED_GAMES = {
     [10549820578] = "Doors-hotel",
     [110258689672367] = "Doors-hotel",
     [189707] = "NaturalDisaster-game",
-    [12137249458] = "Campos-FFA"
+    [12137249458] = "Campos-FFA",
+    [893973440] = "FTF"
 }
 
 local function notify(title, message)
@@ -62,6 +63,49 @@ local function notify(title, message)
         })
     end)
     print("[Msdoors] " .. title .. ": " .. message)
+end
+
+local function notifyError(errorMessage)
+    warn("[Msdoors] Error: " .. errorMessage)
+    pcall(function()
+        Services.StarterGui:SetCore("SendNotification", {
+            Title = "Msdoors | Error",
+            Image = "rbxassetid://95869322194132",
+            Text = "An error occurred. Do you want to copy?\n" .. string.sub(errorMessage, 1, 100),
+            Duration = 50,
+            Button1 = "Copiar erro",
+            Button2 = "Ignorar",
+            Callback = Instance.new("BindableFunction")
+        })
+    end)
+
+    local bindable = Instance.new("BindableFunction")
+    bindable.OnInvoke = function(button)
+        if button == "Copiar erro" then
+            pcall(function()
+                if setclipboard then
+                    setclipboard(errorMessage)
+                elseif toclipboard then
+                    toclipboard(errorMessage)
+                elseif Clipboard and Clipboard.set then
+                    Clipboard.set(errorMessage)
+                end
+            end)
+        end
+        bindable:Destroy()
+    end
+
+    pcall(function()
+        Services.StarterGui:SetCore("SendNotification", {
+            Title = "Msdoors | Error",
+            Image = "rbxassetid://95869322194132",
+            Text = string.sub(errorMessage, 1, 200),
+            Duration = 50,
+            Button1 = "Copiar erro",
+            Button2 = "Ignorar",
+            Callback = bindable
+        })
+    end)
 end
 
 local function loadScript(url)
@@ -97,21 +141,19 @@ local function loadScript(url)
     end
     
     if not response then
-        notify("Erro", "Unable to download script")
+        notifyError("Falha ao baixar o script da URL: " .. url)
         return false
     end
     
-    local success, error = pcall(function()
-        local func = loadstring(response)
-        if func then
-            func()
-        else
-            error("Failed to load script")
-        end
-    end)
-    
+    local func, loadErr = loadstring(response)
+    if not func then
+        notifyError("Falha ao compilar o script:\n" .. tostring(loadErr))
+        return false
+    end
+
+    local success, execErr = pcall(func)
     if not success then
-        notify("Erro", "Failed to execute script")
+        notifyError("Falha ao executar o script:\n" .. tostring(execErr))
         return false
     end
     
@@ -125,17 +167,15 @@ local function startMsdoors()
     local scriptName = SUPPORTED_GAMES[currentGame]
     if not scriptName then
         shared.loaded = false
-        notify("Aviso", "Game not supported")
+        notify("WARN", "Game not supported")
         _G.msdoors_isloading = false
-        print("[ Msdoors ] » Script não está mais carregando. ")
         return
     end
 
     local success = loadScript(SCRIPT_URL .. scriptName)
     
     if success then
-        notify("Sucesso", "Script executed successfully!")
-    else
+        notify("Sucess", "Script executed successfully!")
     end
     
     _G.msdoors_isloading = false
