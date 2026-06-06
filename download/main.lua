@@ -16,10 +16,16 @@ if shared.loaded then
     return
 end
 
+local cloneref = (cloneref or clonereference or function(instance)
+    return instance
+end)
+
+local CoreGui = cloneref(game:GetService("CoreGui"))
+
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxassetid://8486683243"
 sound.Volume = 3
-sound.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+sound.Parent = CoreGui
 sound:Play()
 sound.Ended:Connect(function()
     sound:Destroy()
