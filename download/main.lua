@@ -22,6 +22,40 @@ end)
 
 local CoreGui = cloneref(game:GetService("CoreGui"))
 
+local function GetGitAudioID(githubLink, soundName)
+    local fileName = "customObject_Sound_" .. tostring(soundName) .. ".mp3"
+    local success, audioData = pcall(function()
+        return game:HttpGet(githubLink)
+    end)
+    if not success then
+        warn("Falha ao baixar o áudio: " .. githubLink)
+        return nil
+    end
+    writefile(fileName, audioData)
+    return (getcustomasset or getsynasset)(fileName)
+end
+
+local function PlayGitSound(githubLink, soundName, volume)
+    local soundId = GetGitAudioID(githubLink, soundName)
+    if soundId then
+        local sound = Instance.new("Sound")
+        sound.SoundId = soundId
+        sound.Volume = volume or 0.5
+        sound.Parent = CoreGui
+        sound:Play()
+        sound.Ended:Connect(function()
+            sound:Destroy()
+            delfile("customObject_Sound_" .. tostring(soundName) .. ".mp3")
+        end)
+        return sound
+    end
+    
+    return nil
+end
+
+PlayGitSound("https://github.com/Sc-Rhyan57/RandomStuff/raw/refs/heads/main/blue_lock_goal_score.mp3", "GOAAAAALLLL", 3)
+
+--[[
 local sound = Instance.new("Sound")
 sound.SoundId = "rbxassetid://8486683243"
 sound.Volume = 3
@@ -30,6 +64,7 @@ sound:Play()
 sound.Ended:Connect(function()
     sound:Destroy()
 end)
+]]--
 
 local Services = {
     ReplicatedStorage = game:GetService("ReplicatedStorage"),
