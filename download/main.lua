@@ -86,6 +86,7 @@ local SUPPORTED_GAMES = {
     [6516141723] = "Doors-lobby",
     [107838858975205] = "Doors-lobby", -- hardcore lobby
     [137519142947486] = "Doors-hotel", -- Hardcore
+    [92934548952604] = "Doors-hotel", -- hardcore+
     [104289811284920] = "Doors-hotel", -- hardcore backup
     [6839171747] = "Doors-hotel",
     [2440500124] = "Doors-hotel",
