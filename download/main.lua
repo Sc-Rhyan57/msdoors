@@ -1,16 +1,16 @@
 if _G.msdoors_isloading then
-    print(" O SCRIPT JÁ ESTÁ CARREGANDO!!! ")
+    print(" THE SCRIPT IS ALREADY LOADING!!! ")
     return
 end
 
 _G.msdoors_version = "01.11.25"
 
 if shared.loaded then
-    warn("[Msdoors] • Script já está carregado!")
+    warn("[Msdoors] • Script is already loaded!")
     game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "Script já carregado!",
+        Title = "Script already loaded!",
         Image = "rbxassetid://95869322194132",
-        Text = "o script já está carregado!",
+        Text = "The script is already loaded!",
         Duration = 5
     })
     return
@@ -22,49 +22,27 @@ end)
 
 local CoreGui = cloneref(game:GetService("CoreGui"))
 
-local function GetGitAudioID(githubLink, soundName)
-    local fileName = "customObject_Sound_" .. tostring(soundName) .. ".mp3"
-    local success, audioData = pcall(function()
-        return game:HttpGet(githubLink)
+local function playRobloxSound(soundId, volume)
+    local sound = Instance.new("Sound")
+    sound.SoundId = "rbxassetid://" .. tostring(soundId)
+    sound.Volume = volume or 3
+    sound.Parent = CoreGui
+    sound:Play()
+    sound.Ended:Connect(function()
+        sound:Destroy()
     end)
-    if not success then
-        warn("Falha ao baixar o áudio: " .. githubLink)
-        return nil
-    end
-    writefile(fileName, audioData)
-    return (getcustomasset or getsynasset)(fileName)
+    return sound
 end
 
-local function PlayGitSound(githubLink, soundName, volume)
-    local soundId = GetGitAudioID(githubLink, soundName)
-    if soundId then
-        local sound = Instance.new("Sound")
-        sound.SoundId = soundId
-        sound.Volume = volume or 0.5
-        sound.Parent = CoreGui
-        sound:Play()
-        sound.Ended:Connect(function()
-            sound:Destroy()
-            delfile("customObject_Sound_" .. tostring(soundName) .. ".mp3")
-        end)
-        return sound
-    end
-    
-    return nil
+local RARE_SOUND_ID = 114029807919810
+local MAIN_SOUND_ID = 8486683243
+local RARE_CHANCE = 0.05
+
+if math.random() < RARE_CHANCE then
+    playRobloxSound(RARE_SOUND_ID, 3)
+else
+    playRobloxSound(MAIN_SOUND_ID, 3)
 end
-
-PlayGitSound("https://github.com/Sc-Rhyan57/RandomStuff/raw/refs/heads/main/blue_lock_goal_score.mp3", "GOAAAAALLLL", 3)
-
---[[
-local sound = Instance.new("Sound")
-sound.SoundId = "rbxassetid://8486683243"
-sound.Volume = 3
-sound.Parent = CoreGui
-sound:Play()
-sound.Ended:Connect(function()
-    sound:Destroy()
-end)
-]]--
 
 local Services = {
     ReplicatedStorage = game:GetService("ReplicatedStorage"),
@@ -84,12 +62,12 @@ end
 local SCRIPT_URL = "https://raw.msdoors.xyz/"
 local SUPPORTED_GAMES = {
     [6516141723] = "Doors-lobby",
-    [107838858975205] = "Doors-lobby", -- hardcore lobby
-    [137519142947486] = "Doors-hotel", -- Hardcore
-    [92934548952604] = "Doors-hotel", -- hardcore+
-    [131351567799504] = "Doors-hotel", -- hardcore fangame -- REIGNITED
-    [74871629393921] = "Doors-lobby", -- hardcore fangame lobby -- REIGNITED
-    [104289811284920] = "Doors-hotel", -- hardcore backup
+    [107838858975205] = "Doors-lobby",
+    [137519142947486] = "Doors-hotel",
+    [92934548952604] = "Doors-hotel",
+    [131351567799504] = "Doors-hotel",
+    [74871629393921] = "Doors-lobby",
+    [104289811284920] = "Doors-hotel",
     [6839171747] = "Doors-hotel",
     [2440500124] = "Doors-hotel",
     [87716067947993] = "Doors-hotel",
@@ -114,21 +92,10 @@ end
 
 local function notifyError(errorMessage)
     warn("[Msdoors] Error: " .. errorMessage)
-    pcall(function()
-        Services.StarterGui:SetCore("SendNotification", {
-            Title = "Msdoors | Error",
-            Image = "rbxassetid://95869322194132",
-            Text = "An error occurred. Do you want to copy?\n" .. string.sub(errorMessage, 1, 100),
-            Duration = 50,
-            Button1 = "Copiar erro",
-            Button2 = "Ignorar",
-            Callback = Instance.new("BindableFunction")
-        })
-    end)
 
     local bindable = Instance.new("BindableFunction")
     bindable.OnInvoke = function(button)
-        if button == "Copiar erro" then
+        if button == "Copy error" then
             pcall(function()
                 if setclipboard then
                     setclipboard(errorMessage)
@@ -137,6 +104,14 @@ local function notifyError(errorMessage)
                 elseif Clipboard and Clipboard.set then
                     Clipboard.set(errorMessage)
                 end
+            end)
+            pcall(function()
+                Services.StarterGui:SetCore("SendNotification", {
+                    Title = "Msdoors | Copied!",
+                    Image = "rbxassetid://95869322194132",
+                    Text = "Error copied to clipboard!",
+                    Duration = 3
+                })
             end)
         end
         bindable:Destroy()
@@ -148,62 +123,73 @@ local function notifyError(errorMessage)
             Image = "rbxassetid://95869322194132",
             Text = string.sub(errorMessage, 1, 200),
             Duration = 50,
-            Button1 = "Copiar erro",
-            Button2 = "Ignorar",
+            Button1 = "Copy error",
+            Button2 = "Ignore",
             Callback = bindable
         })
     end)
 end
 
 local function loadScript(url)
+    local response = nil
+    local lastError = nil
+
     local httpMethods = {
-        function() return game:HttpGet(url) end,
-        function() 
+        function()
+            return game:HttpGet(url)
+        end,
+        function()
             if typeof(http_request) == "function" then
-                local response = http_request({Url = url, Method = "GET"})
-                return response.Body
+                local res = http_request({ Url = url, Method = "GET" })
+                return res.Body
             end
         end,
-        function() 
+        function()
             if typeof(request) == "function" then
-                local response = request({Url = url, Method = "GET"})
-                return response.Body
+                local res = request({ Url = url, Method = "GET" })
+                return res.Body
             end
         end,
         function()
             if typeof(syn) == "table" and typeof(syn.request) == "function" then
-                local response = syn.request({Url = url, Method = "GET"})
-                return response.Body
+                local res = syn.request({ Url = url, Method = "GET" })
+                return res.Body
             end
         end
     }
-    
-    local response = nil
+
     for _, method in pairs(httpMethods) do
         local success, result = pcall(method)
         if success and result then
             response = result
+            lastError = nil
             break
+        elseif not success then
+            lastError = tostring(result)
         end
     end
-    
+
     if not response then
-        notifyError("Falha ao baixar o script da URL: " .. url)
+        local errMsg = "Failed to download script from: " .. url
+        if lastError then
+            errMsg = errMsg .. "\nServer error: " .. lastError
+        end
+        notifyError(errMsg)
         return false
     end
-    
+
     local func, loadErr = loadstring(response)
     if not func then
-        notifyError("Falha ao compilar o script:\n" .. tostring(loadErr))
+        notifyError("Failed to compile script:\n" .. tostring(loadErr))
         return false
     end
 
     local success, execErr = pcall(func)
     if not success then
-        notifyError("Falha ao executar o script:\n" .. tostring(execErr))
+        notifyError("Failed to execute script:\n" .. tostring(execErr))
         return false
     end
-    
+
     return true
 end
 
@@ -220,11 +206,11 @@ local function startMsdoors()
     end
 
     local success = loadScript(SCRIPT_URL .. scriptName)
-    
+
     if success then
-        notify("Sucess", "Script executed successfully!")
+        notify("Success", "Script executed successfully!")
     end
-    
+
     _G.msdoors_isloading = false
 end
 
