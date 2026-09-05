@@ -60,6 +60,8 @@ local function safeCall(func, ...)
 end
 
 local SCRIPT_URL = "https://raw.msdoors.xyz/"
+local FALLBACK_URL = "https://msdoors-content.vercel.app/"
+
 local SUPPORTED_GAMES = {
     [6516141723] = "Doors-lobby",
     [107838858975205] = "Doors-lobby",
@@ -130,10 +132,7 @@ local function notifyError(errorMessage)
     end)
 end
 
-local function loadScript(url)
-    local response = nil
-    local lastError = nil
-
+local function fetchUrl(url)
     local httpMethods = {
         function()
             return game:HttpGet(url)
@@ -158,25 +157,45 @@ local function loadScript(url)
         end
     }
 
+    local lastError = nil
     for _, method in pairs(httpMethods) do
         local success, result = pcall(method)
         if success and result then
-            response = result
-            lastError = nil
-            break
+            return result, nil
         elseif not success then
             lastError = tostring(result)
         end
     end
+    return nil, lastError
+end
+
+local function loadScript(urls)
+    local response = nil
+    local lastError = nil
+    local usedUrl = nil
+
+    for _, url in ipairs(urls) do
+        local body, err = fetchUrl(url)
+        if body then
+            response = body
+            usedUrl = url
+            break
+        else
+            lastError = err
+            warn("[Msdoors] Failed to fetch from: " .. url .. (err and (" (" .. err .. ")") or ""))
+        end
+    end
 
     if not response then
-        local errMsg = "Failed to download script from: " .. url
+        local errMsg = "Failed to download script from all sources:\n" .. table.concat(urls, "\n")
         if lastError then
-            errMsg = errMsg .. "\nServer error: " .. lastError
+            errMsg = errMsg .. "\nLast error: " .. lastError
         end
         notifyError(errMsg)
         return false
     end
+
+    print("[Msdoors] Loaded from: " .. usedUrl)
 
     local func, loadErr = loadstring(response)
     if not func then
@@ -205,7 +224,12 @@ local function startMsdoors()
         return
     end
 
-    local success = loadScript(SCRIPT_URL .. scriptName)
+    local urls = {
+        SCRIPT_URL .. scriptName,
+        FALLBACK_URL .. scriptName
+    }
+
+    local success = loadScript(urls)
 
     if success then
         notify("Success", "Script executed successfully!")
