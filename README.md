@@ -37,6 +37,6 @@
 ### **📂 SCRIPT DONWLOAD**
 - VERSÃO ATUAL
 ```luau
-loadstring(game:HttpGet("https://msdoors-gg.vercel.app/script"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Sc-Rhyan57/msdoors/refs/heads/main/download/main.lua"))()
 ```
 ---
